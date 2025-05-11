@@ -242,8 +242,43 @@
   height: auto;
 }
 
+.mother-image {
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: var(--accent-color) !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 
- 
+    /* Adjust image section positioning */
+    .image-section {
+        position: relative;
+        overflow: hidden;
+        padding-top: 133.33%; /* Maintain 3:4 aspect ratio (400/300*100) */
+        height: auto;
+    }
+
+    .image-section > .mother-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+ .hidden-element1
+ {
+     position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    
+ }
     
     </style>
 </head>
@@ -313,20 +348,19 @@
         }
 
         
-
-    function handleImageUpload(input) {
-        const container = input.closest('.poster-container');
-        const preview = container.querySelector('.mother-image');
-        const file = input.files[0];
-        
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.style.backgroundImage = `url(${e.target.result})`;
-            };
-            reader.readAsDataURL(file);
-        }
+function handleImageUpload(input) {
+    const container = input.closest('.poster-container');
+    const preview = container.querySelector('.mother-image');
+    const file = input.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
     }
+}
 
     // Fix addNewPoster function
     function addNewPoster() {
