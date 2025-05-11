@@ -177,6 +177,74 @@
         .hidden-element {
             display: none !important;
         }
+         .mother-image {
+        background-size: cover !important;
+        background-position: center !important;
+        transition: all 0.3s ease;
+    }
+
+    .logo-section {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .logo-section img {
+        width: 80%;
+        opacity: 0.8;
+        margin-top: 5px;
+    }
+
+    .content-section::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%);
+    }
+
+    /* Update image container styling */
+    .mother-image {
+        background-size: contain !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: var(--accent-color) !important;
+    }
+
+    /* Adjust logo positioning */
+    .upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+  margin-top: 20px;
+}
+
+.image-section {
+  position: relative;
+  width: 300px;
+  height: 400px;
+}
+
+.mother-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  /*border: 2px dashed #ccc;*/
+  border-radius: 10px;
+}
+
+.logo-section img {
+  max-width: 200px;
+  height: auto;
+}
+
+
+ 
+    
     </style>
 </head>
 <body>
@@ -202,7 +270,7 @@
             <div class="watermark"></div>
             <div class="poster-template">
                 <div class="content-section">
-                    <img src="./assets/image (5).png" alt="Watermark" class="content-image">
+                    <!-- <img src="./assets/image (5).png" alt="Watermark" class="content-image"> -->
 <!-- Sunflower decorations spread on the left side -->
 <!-- 🌸 Decorative flowers around (not on) the title -->
 <!-- <div class="sunflower" style="top: 70px; left: 50px;">🌸</div>
@@ -215,20 +283,24 @@
                         "A mother's love is the fuel that enables a normal human being to do the impossible."
                     </div>
                 </div>
-                <div class="image-section">
-                  <div class="mother-image" style='background: #ffe6ee url("data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;300&quot; height=&quot;400&quot;><text x=&quot;50%&quot; y=&quot;50%&quot; dominant-baseline=&quot;middle&quot; text-anchor=&quot;middle&quot; font-family=&quot;Arial&quot; font-size=&quot;20&quot; fill=&quot;%23e75480&quot;>Upload Photo</text></svg>") center/cover;'>
-                  </div>
-                  
-                    <button onclick="triggerUpload(this)" style="position: absolute; bottom: 20px">
-                        📸 Upload Photo
-                    </button>
-                    <input type="file" class="hidden-element" accept="image/*">
-                </div>
+<div class="upload-container">
+  <div class="image-section">
+    <div class="mother-image" style='background-image: url("data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;300&quot; height=&quot;400&quot;><text x=&quot;50%&quot; y=&quot;50%&quot; dominant-baseline=&quot;middle&quot; text-anchor=&quot;middle&quot; font-family=&quot;Arial&quot; font-size=&quot;20&quot; fill=&quot;%23e75480&quot;>Upload Photo</text></svg>")'></div>
+    <input type="file" class="hidden-element1" accept="image/*">
+  </div>
+  <div class="logo-section">
+    <img src="./assets/image (5).png" alt="Mother's Day Logo">
+  </div>
+</div>
+
+                
+                
             </div>
             <div class="controls">
                 <button onclick="downloadPoster(this)">📥 Download Poster</button>
                 <button onclick="deletePoster(this)" style="background: linear-gradient(45deg, #666, #999)">🗑️ Delete Poster</button>
             </div>
+            
         </div>
     </div>
 
@@ -242,19 +314,43 @@
 
         
 
-        function handleImageUpload(input) {
-            const container = input.closest('.poster-container');
-            const preview = container.querySelector('.mother-image');
-            const file = input.files[0];
+    function handleImageUpload(input) {
+        const container = input.closest('.poster-container');
+        const preview = container.querySelector('.mother-image');
+        const file = input.files[0];
+        
+        if (file) {
             const reader = new FileReader();
-
             reader.onload = function(e) {
                 preview.style.backgroundImage = `url(${e.target.result})`;
             };
-
-            if (file) reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
         }
+    }
 
+    // Fix addNewPoster function
+    function addNewPoster() {
+        const original = document.querySelector('.poster-container');
+        const clone = original.cloneNode(true);
+        
+        // Reset event listeners properly
+        const newUploadBtn = clone.querySelector('button[onclick="triggerUpload(this)"]');
+        const newFileInput = clone.querySelector('input[type="file"]');
+        newUploadBtn.onclick = function() { triggerUpload(this); };
+        newFileInput.onchange = function() { handleImageUpload(this); };
+
+        // Add to DOM with animation
+        clone.style.transform = 'scale(0.8) translateY(50px)';
+        clone.style.opacity = '0';
+        document.getElementById('main-container').appendChild(clone);
+        
+        // Animate entrance
+        requestAnimationFrame(() => {
+            clone.style.transform = 'scale(1) translateY(0)';
+            clone.style.opacity = '1';
+            clone.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        });
+    }
         function addNewPoster() {
             const original = document.querySelector('.poster-container');
             const clone = original.cloneNode(true);
